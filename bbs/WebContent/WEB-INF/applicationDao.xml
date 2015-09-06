@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+               http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+               http://www.springframework.org/schema/context
+               http://www.springframework.org/schema/context/spring-context-4.0.xsd
+               http://www.springframework.org/schema/tx
+               http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+               http://www.springframework.org/schema/aop
+               http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+               ">
+	 <!-- 系统管理UserDao -->
+	 <bean id="userDao" class="cn.edu.ahut.dao.system_manage.impl.UserDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+	</bean>
+	
+	 <!-- 后台管理UserDao -->
+	 <bean id="adminUserDao" class="cn.edu.ahut.dao.admin_manage.impl.UserDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+	</bean>
+	
+	<!-- 公告管理NoticeDao -->
+	<bean id="noticeDao" class="cn.edu.ahut.dao.admin_manage.impl.NoticeDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+	</bean>
+	
+	<!-- 板块管理SectionDao -->
+	<bean id="sectionDao" class="cn.edu.ahut.dao.admin_manage.impl.SectionDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+	</bean>
+	
+	<!-- 主题帖管理TopicDao -->
+	<bean id="topicDao" class="cn.edu.ahut.dao.system_manage.impl.TopicDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+	</bean>
+	
+	<!-- 社区图片ImageDao -->
+	<bean id="imageDao" class="cn.edu.ahut.dao.system_manage.impl.ImageDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+	</bean>
+</beans>

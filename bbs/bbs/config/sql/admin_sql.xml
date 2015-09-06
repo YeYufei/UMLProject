@@ -1,0 +1,787 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="admin">
+
+<!--************************** 用户管理 开始*******************************-->
+	<resultMap id="UserVOResult" class="UserVO">
+		<result column="ID" 			property="id"/>
+		<result column="USERNAME" 		property="username"/>
+		<result column="USERPWD" 		property="userpwd"/>
+		<result column="EMAIL" 			property="email"/>
+	</resultMap>
+	
+	<resultMap id="UserVOResult_1" class="UserVO">
+		<result column="ID" 			property="id"/>
+		<result column="USERNAME" 		property="username"/>
+		<result column="USERPWD" 		property="userpwd"/>
+		<result column="EMAIL" 			property="email"/>
+		<result column="STATUS" 		property="status"/>
+		<result column="SYSROLE" 		property="sysrole"/>
+	</resultMap>
+	
+	<!-- 查询所有管理员  -->
+	<select id="query_all_manager" resultMap="UserVOResult_1">
+		select
+		distinct 
+		t.ID 								AS ID,
+		t.USERNAME 							AS USERNAME,
+		t.USERPWD 							AS USERPWD,
+		t.EMAIL 							AS EMAIL,
+		t3.STATUS							AS STATUS,
+		t3.SYSROLE							AS SYSROLE
+		from 
+		tb_user t,
+		(	
+			select 
+            distinct            
+            t1.uid     as UID,
+			t1.status  as STATUS,
+			t1.sysrole as SYSROLE
+			from tb_userinfo t1
+			left join tb_user t2 on t1.uid =t2.id
+		) t3 
+		where t.id = t3.UID and 
+		(t3.sysrole = '01')
+		order by ID
+	</select>
+	
+	
+	<!-- 查询所有用户  -->
+	<select id="query_all_userVO" resultMap="UserVOResult_1">
+		select
+		distinct 
+		t.ID 								AS ID,
+		t.USERNAME 							AS USERNAME,
+		t.USERPWD 							AS USERPWD,
+		t.EMAIL 							AS EMAIL,
+		t3.STATUS							AS STATUS,
+		t3.SYSROLE							AS SYSROLE
+		from 
+		tb_user t,
+		(	
+			select 
+            distinct            
+            t1.uid     as UID,
+			t1.status  as STATUS,
+			t1.sysrole as SYSROLE
+			from tb_userinfo t1
+			left join tb_user t2 on t1.uid =t2.id
+		) t3 
+		where t.id = t3.UID and 
+		t3.sysrole = '03'
+		order by ID
+	</select>
+	
+	<resultMap id="UserVOResult_2" class="UserVO">
+		<result column="ID" 			property="id"/>
+		<result column="USERNAME" 		property="username"/>
+		<result column="USERPWD" 		property="userpwd"/>
+		<result column="EMAIL" 			property="email"/>
+		<result column="STATUS" 		property="status"/>
+		<result column="SYSROLE" 		property="sysrole"/>
+		<result column="SECTIONNAME" 	property="sectionName"/>
+	</resultMap>
+	
+	<!-- 查询所有版主  -->
+	<select id="query_all_section_manager" resultMap="UserVOResult_2">
+		select
+		distinct 
+		t.ID 								AS ID,
+		t.USERNAME 							AS USERNAME,
+		t.USERPWD 							AS USERPWD,
+		t.EMAIL 							AS EMAIL,
+		t3.STATUS							AS STATUS,
+		t3.SYSROLE							AS SYSROLE,
+		t4.NAME								AS SECTIONNAME
+		from 
+		tb_user t,
+		(	
+			select 
+            distinct            
+            t1.uid     as UID,
+			t1.status  as STATUS,
+			t1.sysrole as SYSROLE
+			from tb_userinfo t1
+			left join tb_user t2 on t1.uid =t2.id
+		) t3,
+		(
+			select 
+            tb_userinfo.uid  as uid,
+            tb_subsection.name as NAME
+			from tb_subsection 
+			left join tb_userinfo on tb_subsection.managerid = tb_userinfo.uid 
+		)t4
+		where 
+        t.id = t3.UID and 
+        t.id = t4.UID and
+		t3.sysrole = '04'
+		order by ID
+	</select>
+	
+	<!-- 查询所有 激活用户  -->
+	<select id="query_all_active_userVO" resultMap="UserVOResult_1">
+		select
+		distinct 
+		t.ID 								AS ID,
+		t.USERNAME 							AS USERNAME,
+		t.USERPWD 							AS USERPWD,
+		t.EMAIL 							AS EMAIL,
+		t3.STATUS							AS STATUS,
+		t3.SYSROLE							AS SYSROLE
+		from 
+		tb_user t,
+		(	
+			select 
+            distinct            
+            t1.uid     as UID,
+			t1.status  as STATUS,
+			t1.sysrole as SYSROLE
+			from tb_userinfo t1
+			left join tb_user t2 on t1.uid =t2.id
+		) t3 
+		where 
+		t.id = t3.UID and 
+		t3.status = '01' and 
+		t3.sysrole = '03'
+		order by ID
+	</select>
+	
+	<!-- 查询所有 禁言用户  -->
+	<select id="query_all_nospeak_userVO" resultMap="UserVOResult_1">
+		select
+		distinct 
+		t.ID 								AS ID,
+		t.USERNAME 							AS USERNAME,
+		t.USERPWD 							AS USERPWD,
+		t.EMAIL 							AS EMAIL,
+		t3.STATUS							AS STATUS,
+		t3.SYSROLE							AS SYSROLE
+		from 
+		tb_user t,
+		(	
+			select 
+            distinct            
+            t1.uid     as UID,
+			t1.status  as STATUS,
+			t1.sysrole as SYSROLE
+			from tb_userinfo t1
+			left join tb_user t2 on t1.uid =t2.id
+		) t3 
+		where t.id = t3.UID and 
+		t3.status = '02' and
+		t3.sysrole = '03'
+		order by ID
+	</select>
+	
+	<!-- 查询所有锁定用户  -->
+	<select id="query_all_locked_userVO" resultMap="UserVOResult_1">
+		select
+		distinct 
+		t.ID 								AS ID,
+		t.USERNAME 							AS USERNAME,
+		t.USERPWD 							AS USERPWD,
+		t.EMAIL 							AS EMAIL,
+		t3.STATUS							AS STATUS,
+		t3.SYSROLE							AS SYSROLE
+		from 
+		tb_user t,
+		(	
+			select 
+            distinct            
+            t1.uid     as UID,
+			t1.status  as STATUS,
+			t1.sysrole as SYSROLE
+			from tb_userinfo t1
+			left join tb_user t2 on t1.uid =t2.id
+		) t3 
+		where t.id = t3.UID and 
+		t3.status = '03'and
+		t3.sysrole = '03'
+		order by ID
+	</select>
+	
+	<!-- 根据用户名和密码查找用户 -->
+	<select id="query_userByNamePassword" parameterClass="UserVO" resultMap="UserVOResult" >
+	select
+	distinct
+	tb_user.ID AS ID,
+	tb_user.USERNAME AS USERNAME,
+	tb_user.USERPWD AS USERPWD,
+	tb_user.EMAIL AS EMAIL 
+	from 
+	tb_user 
+	where 
+	tb_user.USERNAME = #username# and
+	tb_user.USERPWD = #userpwd# 
+	</select>
+	
+	<!-- 根据用户名查找用户 -->
+	<select id="query_userByName" parameterClass="UserVO" resultMap="UserVOResult">
+	select
+	distinct
+	tb_user.ID AS ID,
+	tb_user.USERNAME AS USERNAME,
+	tb_user.USERPWD AS USERPWD,
+	tb_user.EMAIL AS EMAIL 
+	from 
+	tb_user
+	where 
+	tb_user.USERNAME = #username#
+	</select>
+	
+	<!-- 根据用户名模糊查找用户 -->
+	<select id="query_userByName_fuzzy" parameterClass="UserVO" resultMap="UserVOResult_1">
+	select
+	distinct
+	t.ID 								AS ID,
+	t.USERNAME 							AS USERNAME,
+	t.USERPWD 							AS USERPWD,
+	t.EMAIL 							AS EMAIL,
+	t3.STATUS							AS STATUS,
+	t3.SYSROLE							AS SYSROLE
+	from 
+	tb_user t,
+	(	
+		select 
+        distinct            
+        t1.uid     as UID,
+		t1.status  as STATUS,
+		t1.sysrole as SYSROLE
+		from tb_userinfo t1
+		left join tb_user t2 on t1.uid =t2.id
+	) t3 
+	where t.id = t3.UID and 
+	t3.sysrole = '03' and
+	t.USERNAME LIKE #username#
+	order by ID
+	</select>
+	
+	<!-- 根据用户ID查找用户基本信息 -->
+	<select id="query_userByID" parameterClass="UserVO" resultMap="UserVOResult">
+	select
+	distinct
+	tb_user.ID AS ID,
+	tb_user.USERNAME AS USERNAME,
+	tb_user.USERPWD AS USERPWD,
+	tb_user.EMAIL AS EMAIL 
+	from 
+	tb_user
+	where 
+	tb_user.ID = #id#
+	</select>
+	
+	<!-- 根据用户ID模糊查找用户基本信息 -->
+	<select id="query_userByID_fuzzy" parameterClass="UserVO" resultMap="UserVOResult_1">
+	select
+	distinct
+	t.ID 								AS ID,
+	t.USERNAME 							AS USERNAME,
+	t.USERPWD 							AS USERPWD,
+	t.EMAIL 							AS EMAIL,
+	t3.STATUS							AS STATUS,
+	t3.SYSROLE							AS SYSROLE
+	from 
+	tb_user t,
+	(	
+		select 
+        distinct            
+        t1.uid     as UID,
+		t1.status  as STATUS,
+		t1.sysrole as SYSROLE
+		from tb_userinfo t1
+		left join tb_user t2 on t1.uid =t2.id
+	) t3 
+	where t.id = t3.UID and 
+	t3.sysrole = '03' and
+	t.id LIKE #idStr#
+	order by ID
+	</select>
+	
+	<!-- 用户详细信息 -->
+	<resultMap class="UserInfoVO" id="UserInfoVOResult">
+		<result column="uid" 			property="uid"/>
+		<result column="sex" 			property="sex"/>
+		<result column="birthday" 		property="birthday"/>
+		<result column="telephone" 		property="telephone"/>
+		<result column="mobile" 		property="mobile"/>
+		<result column="qq" 			property="qq"/>
+		<result column="image" 			property="image"/>
+		<result column="realname" 		property="realname"/>
+		<result column="address" 		property="address"/>
+		<result column="website" 		property="webSite"/>
+		<result column="usersign" 		property="userSign"/>
+		<result column="introduction" 	property="introduction"/>
+		<result column="postsign" 		property="postSign"/>
+		<result column="sysrole" 		property="sysrole"/>
+		<result column="syslevel" 		property="sysLevel"/>
+		<result column="usertitle" 		property="userTitle"/>
+		<result column="scores" 		property="scores"/>
+		<result column="regtime" 		property="regTimeStr"/>
+		<result column="logintime" 		property="loginTimeStr"/>
+		<result column="loginip" 		property="loginIp"/>
+		<result column="status" 		property="status"/>
+		<result column="onlinetime" 	property="onlineTime" />
+		<result column="question"       property="question" />
+		<result column="answer"         property="answer" />
+	</resultMap>
+	<!-- 根据用户基本信息的ID查询用户详细信息 -->
+	<select id="query_userInfoVO" parameterClass="UserVO" resultMap="UserInfoVOResult">
+		SELECT
+		distinct
+		t.uid as uid,
+		a.displayname as sex,
+		DATE_FORMAT(t.birthday,'%Y-%m-%d') as birthday,
+		t.telephone as telephone,
+		t.mobile as mobile,
+		t.qq as qq,
+		t.image as image,
+		t.realname as realname,
+		t.address as address,
+		t.website as website,
+		t.usersign as usersign,
+		t.introduction as introduction,
+		t.postsign as postsign,
+		t.onlinetime as onlinetime,
+		b.displayname as syslevel,
+		c.displayname as usertitle,
+		t.scores as scores,
+		t.loginip as loginip,
+		d.displayname as status,
+		e.displayname as sysrole,
+		DATE_FORMAT(t.regtime,'%Y-%m-%d %H:%i') as regtime,
+		DATE_FORMAT(t.logintime,'%Y-%m-%d %H:%i') as logintime,
+		t.question as question,
+		t.answer as answer
+		FROM 
+		tb_userinfo t
+		left join tb_code a on(a.name='sex' and a.value=t.sex)
+		left join tb_code b on(b.name='syslevel' and b.value=t.syslevel)
+		left join tb_code c on(c.name='usertitle' and c.value=t.usertitle)
+		left join tb_code d on(d.name='status' and d.value=t.status)
+		left join tb_code e on(e.name='sysrole' and e.value=t.sysrole)
+		where t.uid = #id#
+	</select>
+	
+	<!-- 更新用户在线时间  -->
+	<update id="update_onlinetime" parameterClass="UserInfoVO">
+		update tb_userinfo t
+		set t.onlinetime = #onlineTime#
+		where t.uid = #uid#
+	</update>
+	
+	<!-- 更新用户登录时间 和IP -->
+	<update id="update_logintime_ip" parameterClass="UserInfoVO">
+		update tb_userinfo t
+		set 
+		t.logintime = #loginTime#,
+		t.loginip = #loginIp#
+		where t.uid = #uid#
+	</update>
+	
+	<!-- 注册成功时初始化用户详细信息表 -->
+	<insert id="insert_userInfoVO" parameterClass="UserInfoVO">
+		INSERT INTO tb_userinfo
+		(
+			UID,
+			REGTIME,
+			LOGINTIME,
+			LOGINIP,
+			STATUS,
+			SCORES,
+			SYSLEVEL,
+			USERTITLE
+		)VALUES(
+			#uid#,
+			#regTime#,
+			#loginTime#,
+			#loginIp#,
+			#status#,
+			#scores#,
+			#sysLevel#,
+			#userTitle#
+		)
+	</insert>
+	
+	<!-- 更新用户的基本资料 -->
+	<update id="update_userInfo_basicInfo" parameterClass="UserInfoVO">
+		update tb_userinfo t
+		set
+		t.sex = #sex#,
+		t.birthday = #birthday#,
+		t.address = #address#,
+		t.website = #webSite#,
+		t.usersign = #userSign#,
+		t.introduction = #introduction#,
+		t.postsign = #postSign#
+		where
+		t.uid = #uid#
+	</update>
+	
+	<!-- 更新用户的联系方式 -->
+	<update id="update_userInfo_connectInfo" parameterClass="UserInfoVO">
+		update tb_userinfo t
+		set
+		t.telephone = #telephone#,
+		t.mobile = #mobile#,
+		t.qq = #qq#
+		where
+		t.uid = #uid#
+	</update>
+	
+	<!-- 更新用户的头像 -->
+	<update id="update_userInfo_image" parameterClass="UserInfoVO">
+		update tb_userinfo t
+		set
+		t.image = #image#
+		where t.uid = #uid#
+	</update>
+	
+	<!-- 更新用户的密码 -->
+	<update id="update_userVO_password" parameterClass="userVO">
+		update tb_user t
+		set
+		t.userpwd = #userpwd#
+		where
+		t.id = #id#
+	</update>
+	
+	<!-- 激活用户 -->
+	<update id="update_doActive_user" parameterClass="userVO">
+		update tb_userinfo t
+		set t.status = '01'
+		where t.uid = #id#
+	</update>
+	
+		<!-- 禁言用户 -->
+	<update id="update_forbid_user" parameterClass="userVO">
+		update tb_userinfo t
+		set t.status = '02'
+		where t.uid = #id#
+	</update>
+	
+		<!-- 锁定用户 -->
+	<update id="update_lock_user" parameterClass="userVO">
+		update tb_userinfo t
+		set t.status = '03'
+		where t.uid = #id#
+	</update>
+	
+	<!-- 解除管理员 -->
+	<update id="update_delete_manager" parameterClass="UserVO">
+		update tb_userinfo t
+		set t.sysrole = '03'
+		where t.uid = #id#
+	</update>
+	
+	<!-- 添加管理员 -->
+	<update id="update_add_manager" parameterClass="UserVO">
+		update tb_userinfo t
+		set t.sysrole = '01'
+		where t.uid = #id#
+	</update>
+	
+	<!-- 添加版主 -->
+	<update id="update_add_section_manager" parameterClass="UserVO">
+		update tb_userinfo t
+		set t.sysrole = '04'
+		where t.uid = #id#
+	</update>
+	
+	<!-- 删除版主 -->
+	<update id="update_delete_section_manager" parameterClass="UserVO">
+		update tb_userinfo t
+		set t.sysrole = '03'
+		where t.uid = #id#
+	</update>
+	
+	<!--************************** 用户管理 结束*******************************-->
+	
+	<!--************************** 公告管理 开始*******************************-->
+	<!-- 公告详细信息 -->
+	<resultMap class="NoticeVO" id="NoticeVOResult">
+		<result column="ID" 			property="id"/>
+		<result column="TITLE" 			property="title"/>
+		<result column="CONTENT"		property="content"/>
+		<result column="PUBLISHER" 		property="publisher"/>
+		<result column="PUBLISHTIME" 	property="publishtimeStr"/>	
+	</resultMap>
+	
+	<!-- 选择最近的5条公告 -->
+	<select id="query_latest_5_noticeVO" resultMap="NoticeVOResult">
+		select
+		distinct 
+		t.id 											as ID,
+		t.title											as TITLE,
+		t.content										as CONTENT,
+		t.publisher 									as PUBLISHER,
+		DATE_FORMAT(t.publishtime,'%Y-%m-%d') 			as PUBLISHTIME
+		from tb_notice t
+		order by PUBLISHTIME desc limit 5
+	</select>
+
+	<!-- 选择全部公告 -->
+	<select id="query_all_noticeVO" resultMap="NoticeVOResult">
+		select
+		distinct 
+		t.id 											as ID,
+		t.title	 										as TITLE,
+		t.content										as CONTENT,
+		t.publisher 									as PUBLISHER,
+		DATE_FORMAT(t.publishtime,'%Y-%m-%d') 			as PUBLISHTIME
+		from tb_notice t
+		order by PUBLISHTIME desc
+	</select>	
+	
+	<!-- 根据ID选择公告 -->
+	<select id="query_noticeVO" resultMap="NoticeVOResult" parameterClass="NoticeVO">
+		select 
+		distinct
+		t.id 											as ID,
+		t.title 										as TITLE,
+		t.content										as CONTENT,
+		t.publisher 									as PUBLISHER,
+		DATE_FORMAT(t.publishtime,'%Y-%m-%d') 			as PUBLISHTIME
+		from tb_notice t
+		where t.id = #id#
+	</select>
+	
+	<!-- 添加公告 -->
+	<insert id="insert_noticeVO" parameterClass="NoticeVO">
+		insert into 
+		tb_notice
+		(
+			TITLE,
+			CONTENT,
+			PUBLISHER,
+			PUBLISHTIME
+		)
+		values
+		(
+			#title#,
+			#content#,
+			#publisher#,
+			#publishtime#
+		)
+	</insert>
+		
+	<!-- 更新公告 -->
+	<update id="update_noticeVO" parameterClass="NoticeVO">
+		update 
+		tb_notice t
+		set
+		t.title = #title#,
+		t.content = #content#,
+		t.publisher = #publisher#,
+		t.publishtime = #publishtime#
+		where t.id = #id#
+	</update>
+	
+	<!-- 删除公告 -->
+	<delete id="delete_noticeVO" parameterClass="NoticeVO">
+		delete from tb_notice
+		where tb_notice.id = #id#
+	</delete>
+	
+	<!--************************** 公告管理结束*******************************-->
+	
+	<!--************************** 板块管理 开始*******************************-->
+		<!-- 父板块详细信息 -->
+		<resultMap class="SectionVO" id="SectionVOResult">
+			<result column="ID" 				property="id"/>
+			<result column="NAME" 				property="name"/>
+			<result column="PROFILE" 			property="profile"/>
+			<result column="CREATETIME" 		property="createtimeStr"/>
+			<result column="CREATEUSER" 		property="createUser"/>
+			<result column="SUBSECTIONNUMS" 	property="subSectionNums"/>
+		</resultMap>
+		
+		<resultMap class="SectionVO" id="SectionVOResult_1">
+			<result column="ID" 				property="id"/>
+			<result column="NAME" 				property="name"/>
+			<result column="PROFILE" 			property="profile"/>
+			<result column="CREATETIME" 		property="createtimeStr"/>
+			<result column="CREATEUSER" 		property="createUser"/>
+		</resultMap>
+		
+		<!-- 根据板块名称查询父板块 -->
+		<select id="query_sectionVO_byName" parameterClass="SectionVO" resultMap="SectionVOResult_1">
+			select *
+			from tb_section t
+			where t.name = #name#
+		</select>
+		
+		<!-- 查询所有父板块 -->
+		<select id="query_all_sectionVO" resultMap="SectionVOResult">
+			select 
+			t.id									as	ID,
+			t.name									as	NAME,
+			t.profile								as	PROFILE,
+			DATE_FORMAT(t.createtime,'%Y-%m-%d')	as	CREATETIME,
+			t.createuser							as	CREATEUSER,
+			(select count(*) from tb_subsection t1 where t1.sid = t.id)
+			as	SUBSECTIONNUMS
+			from tb_section t
+			order by id
+		</select>
+		
+		<!-- 查询单个父板块 -->
+		<select id="query_sectionVO" resultMap="SectionVOResult" parameterClass="SectionVO">
+			select 
+			t.id									as	ID,
+			t.name									as	NAME,
+			t.profile								as	PROFILE,
+			DATE_FORMAT(t.createtime,'%Y-%m-%d')	as	CREATETIME,
+			t.createuser							as	CREATEUSER,
+			(select count(*) from tb_subsection t1 where t1.sid = t.id)
+			as	SUBSECTIONNUMS
+			from tb_section t
+			where t.id = #id#
+		</select>
+		
+		<!-- 添加父板块 -->
+		<insert id="insert_sectionVO" parameterClass="SectionVO">
+			insert into 
+			tb_section(name,profile,createtime,createuser)
+			values(#name#,#profile#,#createtime#,#createUser#)
+		</insert>
+		
+		<!-- 删除父板块 -->
+		<delete id="delete_sectionVO" parameterClass="SectionVO">
+			delete from tb_section where tb_section.id=#id#
+		</delete>
+		
+		<!-- 修改父板块 -->
+		<update id="update_sectonVO" parameterClass="SectionVO">
+			update tb_section t
+			set t.name = #name#,t.profile=#profile#
+			where t.id = #id#
+		</update>
+		
+		<!-- 子板块详细信息 -->
+		<resultMap class="SubSectionVO" id="SubSectionVOResult">
+			<result column="ID" 			property="id"/>
+			<result column="SID" 			property="sid"/>
+			<result column="NAME" 			property="name"/>
+			<result column="PROFILE" 		property="profile"/>
+			<result column="CREATETIME" 	property="createtimeStr"/>
+			<result column="CREATEUSER" 	property="createUser"/>
+			<result column="SECTIONNAME" 	property="sectionName"/>
+			<result column="MANAGERID" 		property="managerId"/>
+		</resultMap>
+		
+		<resultMap class="SubSectionVO" id="SubSectionVOResult_1">
+			<result column="ID" 			property="id"/>
+			<result column="SID" 			property="sid"/>
+			<result column="NAME" 			property="name"/>
+			<result column="PROFILE" 		property="profile"/>
+			<result column="CREATETIME" 	property="createtimeStr"/>
+			<result column="CREATEUSER" 	property="createUser"/>
+		</resultMap>
+		
+		<!-- 根据板块名称查询子板块 -->
+		<select id="query_subSectionVO_byName" parameterClass="SubSectionVO" resultMap="SubSectionVOResult_1">
+			select * from tb_subsection t
+			where t.name = #name#
+		</select>
+		
+		<!-- 根据父板块ID查找子版块 -->
+		<select id="query_subSection_bySID" parameterClass="SectionVO" resultMap="SubSectionVOResult">
+			select 
+			t.id									as	ID,
+			t.sid									as	SID,
+			t.name									as	NAME,
+			t.managerid								as  MANAGERID,
+			t.profile 			 					as	PROFILE,
+			DATE_FORMAT(t.createtime,'%Y-%m-%d')	as	CREATETIME,
+			t.createuser							as	CREATEUSER,
+			(select t1.name from tb_section t1 where t1.id = t.sid )
+			as SECTIONNAME
+			from tb_subsection t
+			where t.sid = #id#
+			order by id
+		</select>
+		
+		<!-- 查询所有子板块 -->
+		<select id="query_all_subSectionVO" resultMap="SubSectionVOResult">
+			select 
+			t.id									as	ID,
+			t.sid									as	SID,
+			t.name									as	NAME,
+			t.managerid								as  MANAGERID,
+			t.profile								as	PROFILE,
+			DATE_FORMAT(t.createtime,'%Y-%m-%d')	as	CREATETIME,
+			t.createuser							as	CREATEUSER,
+			(select t1.name from tb_section t1 where t1.id = t.sid )
+			as SECTIONNAME
+			from tb_subsection t
+			order by id
+		</select>
+		
+		<!-- 根据ID查询单个子板块 -->
+		<select id="query_subSectionVO" resultMap="SubSectionVOResult" parameterClass="SubSectionVO">
+			select 
+			t.id									as	ID,
+			t.sid									as	SID,
+			t.name									as	NAME,
+			t.managerid								as  MANAGERID,
+			t.profile								as	PROFILE,
+			DATE_FORMAT(t.createtime,'%Y-%m-%d')	as	CREATETIME,
+			t.createuser							as	CREATEUSER,
+			(select t1.name from tb_section t1 where t1.id = t.sid )
+			as SECTIONNAME
+			from tb_subsection t
+			where t.id = #id#
+		</select>
+		
+		<!-- 根据版主ID查询单个子板块 -->
+		<select id="query_subSectionVO_bymanagerId" resultMap="SubSectionVOResult" parameterClass="UserVO">
+			select 
+			t.id									as	ID,
+			t.sid									as	SID,
+			t.name									as	NAME,
+			t.managerid								as  MANAGERID,
+			t.profile								as	PROFILE,
+			DATE_FORMAT(t.createtime,'%Y-%m-%d')	as	CREATETIME,
+			t.createuser							as	CREATEUSER,
+			(select t1.name from tb_section t1 where t1.id = t.sid )
+			as SECTIONNAME
+			from tb_subsection t
+			where t.managerid= #id#
+		</select>
+		
+		<!-- 添加子板块 -->
+		<insert id="insert_subSectionVO" parameterClass="SubSectionVO">
+			insert into 
+			tb_subsection(sid,name,profile,createtime,createuser)
+			values(#sid#,#name#,#profile#,#createtime#,#createUser#)
+		</insert>
+		
+		<!-- 删除子板块 -->
+		<delete id="delete_subSectionVO" parameterClass="SubSectionVO">
+			delete from tb_subsection where tb_subsection.id=#id#
+		</delete>
+		
+		<!-- 修改子板块 -->
+		<update id="update_subSectionVO" parameterClass="SubSectionVO">
+			update tb_subsection t
+			set t.sid = #sid#, t.name = #name#,t.profile=#profile#
+			where t.id = #id#
+		</update>
+		
+		<!-- 设置子板块版主 -->
+		<update id="update_section_add_manager" parameterClass="SubSectionVO">
+			update tb_subsection t
+			set t.managerId = #managerId#
+			where t.id = #id#
+		</update>
+		
+		<!-- 删除板块版主 -->
+		<update id="update_section_delete_manager" parameterClass="SubSectionVO">
+			update tb_subsection t
+			set t.managerid = ''
+			where t.id = #id#
+		</update>
+		
+	<!--************************** 板块管理结束*******************************-->
+</sqlMap>

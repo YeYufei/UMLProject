@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	 <package name="system" namespace="/system" extends="struts_bbs">
+	 
+	 	<action name="pageInit-*" class="initAction" method="{1}">
+			<result name="init">/pages/index.jsp</result>
+			<result name="viewDetailNotice">/pages/system_manage/view_datail_notice.jsp</result>
+		</action>
+		<action name="user-*" class="userAction" method="{1}">
+		    <result>/header.jsp</result>
+		</action>
+		<action name="upload-*" class="uploadAction" method="{1}">
+		    <result>/pages/system_manage/update_userInfo.jsp</result>
+		</action>
+		<action name="welcome-*" class="cn.edu.ahut.base.action.BaseActionSupport">
+			<result>/pages/{1}.jsp</result>
+		</action>
+		<action name="topic-*" class="topicAction" method="{1}">
+			<result name="scanTopic">/pages/system_manage/scan_topic.jsp</result>
+			<result name="viewTopic">/pages/system_manage/view_topic.jsp</result>
+			<result name="viewReply">/pages/system_manage/reply_list.jsp</result>
+			<result name="prepareReply">/pages/system_manage/reply_topic.jsp</result>
+			<!-- Struts2的重定向到ACTION -->
+			<result name="publishTopic" type= "redirectAction"> 
+				<param name="actionName">/system/topic-viewReply</param> 
+				<!-- 这个参数是在action中设置的 -->
+				<param name="topicVO.id">${tid}</param>
+				<param name="subSectionVO.id">${sid}</param>
+				<param name="currentPage">${currentPage}</param>
+			</result>
+			<result name="replyTopic" type= "redirectAction"> 
+				<param name="actionName">/system/topic-viewReply</param> 
+				<!-- 这个参数是在action中设置的 -->
+				<param name="topicVO.id">${tid}</param>
+				<param name="subSectionVO.id">${sid}</param>
+				<param name="currentPage">${currentPage}</param>
+			</result>
+			<result name="queryAllTopicBySid">/pages/system_manage/topic_list.jsp</result>
+			<result name="logout">/pages/logout.jsp</result>
+		</action>
+		<action name="*" class="cn.edu.ahut.base.action.BaseActionSupport">
+			<result>/pages/system_manage/{1}.jsp</result>
+		</action>
+  	</package>
+</struts>

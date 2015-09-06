@@ -1,0 +1,24 @@
+@CHARSET "UTF-8";
+a{
+	text-decoration: none;
+}
+
+a:hover{
+	text-decoration: underline;
+}
+
+.subSection{
+	cursor: pointer;
+	color: blue;
+}
+
+.subSection_hover{
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+.subSection_visited{
+	cursor: pointer;
+	color: white;
+	background-color: #6495ED;
+}

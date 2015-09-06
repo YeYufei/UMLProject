@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE sqlMapConfig PUBLIC "-//ibatis.apache.org//DTD SQL Map Config 2.0//EN" 
+    "http://ibatis.apache.org/dtd/sql-map-config-2.dtd"> 
+<sqlMapConfig> 
+  <settings cacheModelsEnabled = "true" useStatementNamespaces="true" />
+  <!--<typeHandler javaType="com.test.bean.OperationDate" callback="com.test.bean.OperationDateHandlerCallback"/>-->
+ 
+  <sqlMap resource = "sql/typeAlias_sql.xml"/>
+  <sqlMap resource = "sql/system_sql.xml" />
+  <sqlMap resource = "sql/admin_sql.xml" />
+  <sqlMap resource = "sql/topic_sql.xml" />
+  <sqlMap resource = "sql/image_sql.xml" />
+</sqlMapConfig>

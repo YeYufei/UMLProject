@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="topic">
+	<!-- 主题帖详细信息 -->
+	<resultMap class="TopicVO" id="TopicVOResult">
+		<result column="ID" 					property="id"/>
+		<result column="SID" 					property="sid"/>
+		<result column="UID" 					property="uid"/>
+		<result column="TITLE" 					property="title"/>
+		<result column="CONTENT" 				property="content"/>
+		<result column="SENDTIME" 				property="sendTimeStr"/>
+		<result column="TOPIC_STATUS" 			property="topicStatus"/>
+		<result column="UPDATETIME" 			property="updateTimeStr"/>
+		<result column="CLICK_NUM" 				property="clickNum"/>
+		<result column="REPLY_NUM" 				property="replyNum"/>
+	</resultMap>
+	
+	<!-- 增加主题帖 -->
+	<insert id="insert_topicVO" parameterClass="TopicVO">
+		insert into 
+		tb_topic(
+			SID,
+			UID,
+			TITLE,
+			CONTENT,
+			SENDTIME,
+			TOPIC_STATUS,
+			LAST_REPLYTIME
+		)values(
+			#sid#,
+			#uid#,
+			#title#,
+			#content#,
+			#sendTime#,
+			#topicStatus#,
+			#lastReplyTime#
+		)
+	</insert>
+	
+	<!-- 更新主题帖 -->
+	<update id="update_topicVO" parameterClass="TopicVO">
+		update tb_topic t
+		set
+		t.sid = #sid#,
+		t.uid = #uid#,
+		t.title = #title#,
+		t.content = #content#,
+		t.sendtime = #sendTime#,
+		t.topic_status = #topicStatus#
+		where t.id= #id#
+	</update>
+	<!-- 更新主题帖点击量 -->
+	<update id="update_topicVO_clickNum" parameterClass="TopicVO">
+		update tb_topic t
+		set
+		t.click_num = #clickNum#
+		where t.id= #id#
+	</update>
+	<!-- 更新主题帖回帖数 -->
+	<update id="update_topicVO_replyNum" parameterClass="TopicVO">
+		update tb_topic t
+		set
+		t.reply_num = #replyNum#
+		where t.id= #id#
+	</update>
+	
+	<!-- 更新最后的回帖时间-->
+	<update id="update_topicVO_lastreplyTime" parameterClass="TopicVO">
+		update tb_topic t
+		set
+		t.last_replytime = #lastReplyTime#
+		where t.id= #id#
+	</update>
+	
+	<resultMap class="SubSectionVO" id="SubSectionVOResult_1">
+		<result column="TOPIC_NUM" 		property="topicNum"/>
+	</resultMap>
+	
+	<resultMap class="SubSectionVO" id="SubSectionVOResult_2">
+		<result column="ARTICLE_NUM" 		property="articleNum"/>
+	</resultMap>
+	<!-- 查询主题数和文章数 -->
+	<select id="query_topicNum_bySid" resultMap="SubSectionVOResult_1" parameterClass="SubSectionVO">
+		select 
+		count(t1.id) as TOPIC_NUM
+		from tb_topic t1
+		where t1.sid = #id#
+	</select>
+	<select id="query_articleNum_bySid" resultMap="SubSectionVOResult_2" parameterClass="SubSectionVO">
+		select t_1.ARTICLE_NUM+t_2.ARTICLE_NUM as ARTICLE_NUM
+		from
+		(select 
+		count(t1.id) as ARTICLE_NUM
+		from tb_topic t1
+		where t1.sid = #id#
+		)t_1,
+		(select 
+		count(t2.id) as ARTICLE_NUM
+		from tb_topic t1,tb_reply t2
+		where t1.sid = #id# and
+		t2.tid = t1.id
+		)t_2
+	</select>
+	
+	
+	<!-- 查询特定子版块下的最新发表 主题-->
+	<select id="query_last_topic" parameterClass="SubSectionVO" resultMap="TopicVOResult">
+		select 
+		t.id											as	ID,
+		t.sid											as	SID,
+		t.uid											as	UID,
+		t.title											as	TITLE,
+		t.content										as	CONTENT,
+		DATE_FORMAT(t.sendtime,'%Y-%m-%d')				as	SENDTIME,
+		t.topic_status									as	TOPIC_STATUS,
+		DATE_FORMAT(t.updatetime,'%Y-%m-%d')			as	UPDATETIME,
+		t.click_num										as	CLICK_NUM,
+		t.reply_num										as	REPLY_NUM
+		from tb_topic t
+		where t.sid = #id#
+		order by t.updatetime DESC limit 1
+	</select>
+	
+	<!-- 查询特定版块下所有的主题帖 -->
+	<select id="query_all_topicVO" resultMap="TopicVOResult" parameterClass="SubSectionVO">
+		select 
+		t.id											as	ID,
+		t.sid											as	SID,
+		t.uid											as	UID,
+		t.title											as	TITLE,
+		t.content										as	CONTENT,
+		DATE_FORMAT(t.sendtime,'%Y-%m-%d')				as	SENDTIME,
+		t.topic_status									as	TOPIC_STATUS,
+		DATE_FORMAT(t.updatetime,'%Y-%m-%d')			as	UPDATETIME,
+		t.click_num										as	CLICK_NUM,
+		t.reply_num										as	REPLY_NUM
+		from tb_topic t
+		where t.sid = #id#
+		order by t.last_replytime DESC
+	</select>
+	
+	<!-- 查询最新的10条主题帖 -->
+	<select id="query_lasest_10_topicVO" resultMap="TopicVOResult">
+		select 
+		t.id											as	ID,
+		t.sid											as	SID,
+		t.uid											as	UID,
+		t.title											as	TITLE,
+		t.content										as	CONTENT,
+		DATE_FORMAT(t.sendtime,'%m-%d %H:%i')			as	SENDTIME,
+		t.topic_status									as	TOPIC_STATUS,
+		DATE_FORMAT(t.updatetime,'%m-%d %H:%i')			as	UPDATETIME,
+		t.click_num										as	CLICK_NUM,
+		t.reply_num										as	REPLY_NUM
+		from tb_topic t
+		order by t.sendtime DESC limit 10
+	</select>	 
+	
+	<!-- 根据ID查询主题帖 -->
+	<select id="query_topicVO_byId" resultMap="TopicVOResult" parameterClass="TopicVO">
+		select 
+		t.id											as	ID,
+		t.sid											as	SID,
+		t.uid											as	UID,
+		t.title											as	TITLE,
+		t.content										as	CONTENT,
+		DATE_FORMAT(t.sendtime,'%Y-%m-%d %H:%i:%s')				as	SENDTIME,
+		t.topic_status									as	TOPIC_STATUS,
+		DATE_FORMAT(t.updatetime,'%Y-%m-%d %H:%i:%s')			as	UPDATETIME,
+		t.click_num										as	CLICK_NUM,
+		t.reply_num										as	REPLY_NUM
+		from tb_topic t
+		where t.id = #id#
+	</select>
+	
+	<!-- 根据用户名和发帖时间查询主题帖 -->
+	<select id="query_topicVO_by_uid" resultMap="TopicVOResult" parameterClass="TopicVO">
+		select 
+		t.id											as	ID,
+		t.sid											as	SID,
+		t.uid											as	UID,
+		t.title											as	TITLE,
+		t.content										as	CONTENT,
+		DATE_FORMAT(t.sendtime,'%Y-%m-%d %H:%i:%s')				as	SENDTIME,
+		t.topic_status									as	TOPIC_STATUS,
+		DATE_FORMAT(t.updatetime,'%Y-%m-%d %H:%i:%s')			as	UPDATETIME,
+		t.click_num										as	CLICK_NUM,
+		t.reply_num										as	REPLY_NUM
+		from tb_topic t
+		where 
+		t.uid = #uid# and
+		DATE_FORMAT(t.sendtime,'%Y-%m-%d %H:%i:%s') = DATE_FORMAT(#sendTime#,'%Y-%m-%d %H:%i:%s')
+		order by t.updatetime desc limit 1
+	</select>
+	
+	<!-- 回复贴详细信息 -->
+	<resultMap class="ReplyVO" id="ReplyVOResult">
+		<result column="ID" 						property="id"/>
+		<result column="TID" 						property="tid"/>
+		<result column="UID" 						property="uid"/>
+		<result column="TITLE" 						property="title"/>
+		<result column="CONTENT" 					property="content"/>
+		<result column="SENDTIME" 					property="sendTimeStr"/>
+		<result column="UPDATETIME" 				property="updateTimeStr"/>
+	</resultMap>
+	
+	<!-- 增加回帖 -->
+	<insert id="insert_replyVO" parameterClass="ReplyVO">
+		insert into tb_reply
+		(
+			tid,
+			uid,
+			sendtime,
+			title,
+			content
+		)
+		values
+		(
+			#tid#,
+			#uid#,
+			#sendTime#,
+			#title#,
+			#content#
+		)
+	</insert>
+	
+	<!-- 更新回帖 -->
+	<insert id="update_replyVO" parameterClass="ReplyVO">
+		update tb_reply t
+		set
+		tid = #tid#,
+		uid = #uid#,
+		sendtime = #sendTime#,
+		title = #title#,
+		content = #content#
+		where t.id = #id#
+	</insert>
+	
+	<!-- 查询特定主题的回复贴 -->
+	<select id="query_reply_by_tid" resultMap="ReplyVOResult" parameterClass="TopicVO">
+		select 
+		t.id											as	ID,
+		t.tid											as	TID,
+		t.uid											as	UID,
+		t.title											as	TITLE,
+		t.content										as	CONTENT,
+		DATE_FORMAT(t.sendtime,'%Y-%m-%d')				as	SENDTIME,
+		DATE_FORMAT(t.updatetime,'%Y-%m-%d')			as	UPDATETIME
+		from tb_reply t
+		where t.tid = #id#
+		order by ID
+	</select>
+	
+	<!-- 查询最新的10条回帖 -->
+	<select id="query_lasest_10_replyVO" resultMap="ReplyVOResult">
+		select 
+		t.id											as	ID,
+		t.tid											as	TID,
+		t.uid											as	UID,
+		t.title											as	TITLE,
+		t.content										as	CONTENT,
+		DATE_FORMAT(t.sendtime,'%m-%d %H:%i')			as	SENDTIME,
+		DATE_FORMAT(t.updatetime,'%m-%d %H:%i')			as	UPDATETIME
+		from tb_reply t
+		order by t.sendtime desc limit 10
+	</select>	 
+	
+	<!-- 查询特定主题帖下的回复贴数量 -->
+	<select id="query_replyNum_by_tid" parameterClass="TopicVO" resultClass="Integer">
+		select count(id) from tb_reply t where t.tid = #id#
+	</select>
+	
+	<!-- 查询回复贴的位置序号 -->
+	<select id="query_replySort_by_tid" parameterClass="ReplyVO" resultClass="Integer">
+		select count(id) from tb_reply t where t.tid = #tid# and t.id &lt;= #id#
+	</select>
+	
+	<!-- 查询特定主题的最后回帖 -->
+	<select id="query_lastReply_by_tid" parameterClass="TopicVO" resultMap="ReplyVOResult">
+		select 
+		t.id											as	ID,
+		t.tid											as	TID,
+		t.uid											as	UID,
+		t.title											as	TITLE,
+		t.content										as	CONTENT,
+		DATE_FORMAT(t.sendtime,'%Y-%m-%d %H:%i')		as	SENDTIME,
+		DATE_FORMAT(t.updatetime,'%Y-%m-%d')			as	UPDATETIME
+		from tb_reply t
+		where tid = #id#
+		order by t.sendtime desc limit 1
+	</select>
+	
+</sqlMap>

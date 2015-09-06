@@ -1,0 +1,35 @@
+@CHARSET "UTF-8";
+
+a{
+	text-decoration: none;
+}
+
+a:hover{
+	text-decoration: underline;
+}
+
+.subSection_tr{
+	background-color: white;
+}
+
+.subSection_tr_hover{
+	background-color: #F0F8FF;
+}
+
+a.page_link{
+	color: #6495ED;
+	font-size: 13px;
+	text-decoration: none;
+}
+
+a.page_link:hover{
+	color: #6495ED;
+	font-size: 13px;
+	text-decoration: underline;
+}
+
+a.page_link:visited{
+	color: #6495ED;
+	font-size: 13px;
+	text-decoration: none;
+}

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="image">
+	<resultMap class="ImageVO" id="ImageVOResult">
+		<result column="ID"		 property="id"/>
+		<result column="URL"	 property="url"/>
+		<result column="TITLE"	 property="title"/>
+	</resultMap>
+
+	<!-- 新增社区图片 -->
+	<insert id="insert_imageVO" parameterClass="ImageVO">
+		insert into tb_image(
+			url,title
+		)values(
+			#url#,#title#
+		)
+	</insert>
+	
+	<!-- 查询社区图片 -->
+	<select id="query_imageVO" resultMap="ImageVOResult">
+		select * from tb_image order by ID desc limit 6
+	</select>
+</sqlMap>

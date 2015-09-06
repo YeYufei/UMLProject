@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+               http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+               http://www.springframework.org/schema/context
+               http://www.springframework.org/schema/context/spring-context-4.0.xsd
+               http://www.springframework.org/schema/tx
+               http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+               http://www.springframework.org/schema/aop
+               http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+               ">
+	 <!-- 系统管理 UserService -->
+	 <bean id="userService" parent="txProxyTemplate">
+		<property name="target">
+			<bean class="cn.edu.ahut.service.system_manage.impl.UserServiceImpl">
+				<property name="userDao">
+					<ref bean="userDao" />
+				</property>
+			</bean>
+		</property>
+	</bean>
+	
+	<!-- 后台管理 UserService -->
+	 <bean id="adminUserService" parent="txProxyTemplate">
+		<property name="target">
+			<bean class="cn.edu.ahut.service.admin_manage.impl.UserServiceImpl">
+				<property name="userDao">
+					<ref bean="adminUserDao" />
+				</property>
+				<property name="sectionDao">
+					<ref bean="sectionDao" />
+				</property>
+			</bean>
+		</property>
+	</bean>
+	
+	<!-- 公告管理NoticeService -->
+	 <bean id="noticeService" parent="txProxyTemplate">
+		<property name="target">
+			<bean class="cn.edu.ahut.service.admin_manage.impl.NoticeServiceImpl">
+				<property name="noticeDao">
+					<ref bean="noticeDao" />
+				</property>
+			</bean>
+		</property>
+	</bean>
+	
+	<!-- 板块管理SectionService -->
+	 <bean id="sectionService" parent="txProxyTemplate">
+		<property name="target">
+			<bean class="cn.edu.ahut.service.admin_manage.impl.SectionServiceImpl">
+				<property name="sectionDao">
+					<ref bean="sectionDao" />
+				</property>
+				<property name="userDao">
+					<ref bean="adminUserDao" />
+				</property>
+			</bean>
+		</property>
+	</bean>
+	
+	<!-- 主题帖管理TopicService -->
+	 <bean id="topicService" parent="txProxyTemplate">
+		<property name="target">
+			<bean class="cn.edu.ahut.service.system_manage.impl.TopicServiceImpl">
+				<property name="topicDao">
+					<ref bean="topicDao" />
+				</property>
+			</bean>
+		</property>
+	</bean>
+	
+	<!-- 社区图片ImageService -->
+	 <bean id="imageService" parent="txProxyTemplate">
+		<property name="target">
+			<bean class="cn.edu.ahut.service.system_manage.impl.ImageServiceImpl">
+				<property name="imageDao">
+					<ref bean="imageDao" />
+				</property>
+			</bean>
+		</property>
+	</bean>
+</beans>
+
+

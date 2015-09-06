@@ -1,0 +1,44 @@
+@CHARSET "UTF-8";
+.toplist {
+	margin: 0;
+	font-size:13px;
+	list-style: none
+}
+
+.toplist li {
+	line-height: 25px;
+	height: 25px;
+	overflow: hidden;
+	border-bottom: 1px dashed #d5e6ed
+}
+
+a{
+	color: #4169E1 ;
+	text-decoration: none;
+}
+a:hover{
+	color:red;
+	text-decoration: underline;
+}
+a:visited{
+	color:#800080;
+}
+
+a.a1{
+	color: red;
+	text-decoration: none;
+}
+a.a1:hover{
+	color:blue;
+	text-decoration: underline;
+}
+a.a1:visited{
+	color:red;
+}
+.subSection_tr{
+	background-color: white;
+}
+
+.subSection_tr_hover{
+	background-color: #F0F8FF;
+}

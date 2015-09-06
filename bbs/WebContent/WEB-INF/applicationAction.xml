@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+               http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+               http://www.springframework.org/schema/context
+               http://www.springframework.org/schema/context/spring-context-4.0.xsd
+               http://www.springframework.org/schema/tx
+               http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+               http://www.springframework.org/schema/aop
+               http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+               ">
+	<!-- 系统管理 UserAction -->
+	 <bean id="userAction" class="cn.edu.ahut.action.system_manage.UserAction"
+		scope="prototype">
+		<property name="service">
+			<ref bean="userService" />
+		</property>
+		<property name="sectionService">
+			<ref bean="sectionService" />
+		</property>
+	</bean>
+	
+	<!-- 上传管理 UploadAction -->
+	 <bean id="uploadAction" class="cn.edu.ahut.action.system_manage.UploadAction"
+		scope="prototype">
+		<property name="service">
+			<ref bean="userService" />
+		</property>
+	</bean>
+	
+	<!-- 后台管理 UserAction -->
+	 <bean id="adminUserAction" class="cn.edu.ahut.action.admin_manage.UserAction"
+		scope="prototype">
+		<property name="service">
+			<ref bean="adminUserService" />
+		</property>
+		<property name="sectionService">
+			<ref bean="sectionService" />
+		</property>
+	</bean>
+	
+	<!-- 公告管理 NoticeAction -->
+	 <bean id="noticeAction" class="cn.edu.ahut.action.admin_manage.NoticeAction"
+		scope="prototype">
+		<property name="service">
+			<ref bean="noticeService"/>
+		</property>
+	</bean>
+	
+	<!-- 板块管理 SectionAction -->
+	 <bean id="sectionAction" class="cn.edu.ahut.action.admin_manage.SectionAction"
+		scope="prototype">
+		<property name="service">
+			<ref bean="sectionService"/>
+		</property>
+	</bean>
+	
+	<!-- 页面初始化Action  -->
+	 <bean id="initAction" class="cn.edu.ahut.action.system_manage.InitAction"
+		scope="prototype">
+		<property name="sectionService">
+			<ref bean="sectionService"/>
+		</property>
+		<property name="noticeService">
+			<ref bean="noticeService"/>
+		</property>
+		<property name="userService">
+			<ref bean="userService"/>
+		</property>
+		<property name="topicService">
+			<ref bean="topicService"/>
+		</property>
+		<property name="imageService">
+			<ref bean="imageService"/>
+		</property>
+	</bean>
+	
+	<!-- 主题帖Action  -->
+	 <bean id="topicAction" class="cn.edu.ahut.action.system_manage.TopicAction"
+		scope="prototype">
+		<property name="topicService">
+			<ref bean="topicService"/>
+		</property>
+		<property name="userService">
+			<ref bean="userService"/>
+		</property>
+		<property name="sectionService">
+			<ref bean="sectionService"/>
+		</property>
+		<property name="imageService">
+			<ref bean="imageService"/>
+		</property>
+	</bean>
+</beans>

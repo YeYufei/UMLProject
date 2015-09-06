@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	 <package name="admin" namespace="/admin" extends="struts_bbs">
+	 	<!-- 后台用户管理部分 -->
+	 	<action name="user-*" class="adminUserAction" method="{1}">
+		    <result>/pages/admin_manage/admin_login.jsp</result>
+		    <result name="getAllUser">/pages/admin_manage/admin_user_list.jsp</result>
+		    <result name="getAllManager">/pages/admin_manage/admin_manager_list.jsp</result>
+		    <result name="getAllSectionManager">/pages/admin_manage/admin_sectionmanager_list.jsp</result>
+		    <result name="viewManager">/pages/admin_manage/admin_manager_view.jsp</result>
+		    <result name="viewUser">/pages/admin_manage/admin_user_view.jsp</result>
+		    <result name="selectSection">/pages/admin_manage/admin_select_section.jsp</result>
+		    <result name="logout">/pages/admin_manage/logout.jsp</result>
+		</action>
+		
+		<!-- 后台公告管理部分 -->
+		<action name="notice-*" class="noticeAction" method="{1}">
+			<result name="getAllNotice">/pages/admin_manage/admin_notice_list.jsp</result>
+			<result name="viewNotice">/pages/admin_manage/admin_notice_view.jsp</result>
+			<result name="editNotice">/pages/admin_manage/admin_notice_edit.jsp</result>
+			<result>/pages/admin_manage/admin_notice_add.jsp</result>
+			<!-- Struts2的重定向到ACTION -->
+			<result name="deleteNotice" type= "redirectAction"> 
+				<param name="actionName">/admin/notice-queryAllNotice</param> 
+				<!-- 这个参数是在action中设置的 -->
+				<param name="currentPage">${currentPage}</param>
+			</result>
+			<result name="logout">/pages/admin_manage/logout.jsp</result>
+		</action>
+		
+		<!-- 板块管理部分 -->
+		<action name="section-*" class="sectionAction" method="{1}">
+			<!-- 父板块管理部分开始 -->
+			<result name="getAllSection">/pages/admin_manage/admin_section_list.jsp</result>
+			<result>/pages/admin_manage/admin_section_add.jsp</result>
+			<result name="viewSection">/pages/admin_manage/admin_section_view.jsp</result>
+			<result name="editSection">/pages/admin_manage/admin_section_edit.jsp</result>
+			<!-- Struts2的重定向到ACTION -->
+			<result name="deleteSection" type= "redirectAction"> 
+				<param name="actionName">/admin/section-queryAllSection</param> 
+				<!-- 这个参数是在action中设置的 -->
+				<param name="currentPage">${currentPage}</param>
+			</result>
+			<!-- 父板块管理部分结束 -->
+			<!-- 子板块管理部分开始 -->
+			<result name="getAllSubSection">/pages/admin_manage/admin_subSection_list.jsp</result>
+			<result>/pages/admin_manage/admin_subSection_add.jsp</result>
+			<result name="viewSubSection">/pages/admin_manage/admin_subSection_view.jsp</result>
+			<result name="toAddSubSection">/pages/admin_manage/admin_subSection_add.jsp</result>
+			<result name="editSubSection">/pages/admin_manage/admin_subSection_edit.jsp</result>
+			<!-- Struts2的重定向到ACTION -->
+			<result name="deleteSubSection" type= "redirectAction"> 
+				<param name="actionName">/admin/section-queryAllSubSection</param> 
+				<!-- 这个参数是在action中设置的 -->
+				<param name="currentPage">${currentPage}</param>
+			</result>
+			<result name="getAllSubSectionBySid">/pages/admin_manage/admin_subSection_list.jsp</result>
+			<!-- 子板块管理部分结束 -->
+			<result name="logout">/pages/admin_manage/logout.jsp</result>
+		</action>
+		
+		<action name="*" class="cn.edu.ahut.base.action.BaseActionSupport">
+			<result>/pages/admin_manage/{1}.jsp</result>
+		</action>
+  	</package>
+</struts>

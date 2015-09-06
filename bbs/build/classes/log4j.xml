@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">-->
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+	
+	<appender name="debugLog" class="org.apache.log4j.RollingFileAppender">
+	    <param name="Encoding" value="UTF-8" />
+		<param name="File" value="D:/Program Files/Java/Myeclipse/bbs_logs/bbs_Debug.log" />
+        <param name="Threshold" value="DEBUG" />
+	    <param name="Append" value="true" />
+        <param name="MaxFileSize" value="10MB" />
+        <param name="MaxBackupIndex" value="7" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{yyyy/MM/dd HH:mm:ss} %C{1}:%M %-5p %x %m%n" />
+		</layout>
+		<filter class="org.apache.log4j.varia.LevelMatchFilter">
+            <param name="LevelToMatch" value="DEBUG"/>  
+            <param name="AcceptOnMatch" value="true"/>
+        </filter>
+        <filter class="org.apache.log4j.varia.DenyAllFilter"/>
+	</appender>
+	
+	<appender name="infoLog" class="org.apache.log4j.RollingFileAppender">
+	    <param name="Encoding" value="UTF-8" />
+		<param name="File" value="D:/Program Files/Java/Myeclipse/bbs_logs/bbs_Info.log" />
+		<param name="Threshold" value="INFO" />
+ 	    <param name="Append" value="true" />
+        <param name="MaxFileSize" value="10MB" />
+        <param name="MaxBackupIndex" value="7" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{yyyy/MM/dd HH:mm:ss} %x %m%n" />
+		</layout>
+        <filter class="org.apache.log4j.varia.LevelMatchFilter">
+            <param name="LevelToMatch" value="INFO"/>  
+            <param name="AcceptOnMatch" value="true"/>
+        </filter>
+        <filter class="org.apache.log4j.varia.DenyAllFilter"/>
+	</appender>
+
+	<appender name="errorLog" class="org.apache.log4j.RollingFileAppender">
+	    <param name="Encoding" value="UTF-8" />
+		<param name="File" value="D:/Program Files/Java/Myeclipse/bbs_logs/bbs_Error.log" />
+		<param name="Threshold" value="ERROR" />
+		<param name="Append" value="true" />
+        <param name="MaxFileSize" value="10MB" />
+        <param name="MaxBackupIndex" value="7" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{yyyy/MM/dd HH:mm:ss} %C{1}:%M %-5p %x %m%n" />
+		</layout>
+        <filter class="org.apache.log4j.varia.LevelMatchFilter">
+            <param name="LevelToMatch" value="Error"/>  
+            <param name="AcceptOnMatch" value="true"/>
+        </filter>
+        <filter class="org.apache.log4j.varia.DenyAllFilter"/>
+	</appender>
+
+	<appender name="traceLog" class="org.apache.log4j.RollingFileAppender">
+	    <param name="Encoding" value="UTF-8" />
+		<param name="File" value="D:/Program Files/Java/Myeclipse/bbs_logs/bbs_Trace.log" />
+		<param name="Threshold" value="TRACE" />
+		<param name="Append" value="true" />
+        <param name="MaxFileSize" value="10MB" />
+        <param name="MaxBackupIndex" value="7" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{yyyy/MM/dd HH:mm:ss} %C{1}:%M %-5p %x %m%n" />
+		</layout>
+		<filter class="org.apache.log4j.varia.StringMatchFilter">
+            <param name="StringToMatch" value="returning" />
+            <param name="AcceptOnMatch" value="false" />
+        </filter>
+		<filter class="org.apache.log4j.varia.LevelMatchFilter">
+            <param name="LevelToMatch" value="TRACE"/>  
+            <param name="AcceptOnMatch" value="true"/>
+        </filter>
+        <filter class="org.apache.log4j.varia.DenyAllFilter"/>
+	</appender>	
+
+	<appender name="fatalLog" class="org.apache.log4j.RollingFileAppender">
+	    <param name="Encoding" value="UTF-8" />
+		<param name="File" value="D:/Program Files/Java/Myeclipse/bbs_logs/bbs_Fatal.log" />
+		<param name="Threshold" value="FATAL" />
+		<param name="Append" value="true" />
+        <param name="MaxFileSize" value="1MB" />
+        <param name="MaxBackupIndex" value="7" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{yyyy/MM/dd HH:mm:ss} %m%n" />
+		</layout>
+        <filter class="org.apache.log4j.varia.LevelMatchFilter">
+            <param name="LevelToMatch" value="FATAL"/>  
+            <param name="AcceptOnMatch" value="true"/>
+        </filter>
+        <filter class="org.apache.log4j.varia.DenyAllFilter"/>
+	</appender>
+
+    <appender name="console" class="org.apache.log4j.ConsoleAppender">
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{yyyy/MM/dd HH:mm:ss} %5p %x %-72c %t - %m%n" />
+        </layout>
+    </appender>
+    
+	<logger name="cn.edu.ahut">
+	  <level value="TRACE" />
+  	  <appender-ref ref="debugLog" />
+  	  <appender-ref ref="infoLog" />
+  	  <appender-ref ref="errorLog" />
+  	  <appender-ref ref="traceLog" />
+  	  <appender-ref ref="fatalLog" />
+  	  <appender-ref ref="console" />
+	</logger>
+	
+	<logger name="org.springframework.transaction.interceptor.TransactionInterceptor">
+	  <level value="DEBUG" />
+  	  <appender-ref ref="debugLog" />
+  	  <appender-ref ref="infoLog" />
+  	  <appender-ref ref="errorLog" />
+  	  <appender-ref ref="traceLog" />
+  	  <appender-ref ref="fatalLog" />
+  	  <appender-ref ref="console" />
+	</logger>
+	<logger name="org.springframework.orm.ibatis">
+	  <level value="ERROR" />
+  	  <appender-ref ref="debugLog" />
+  	  <appender-ref ref="infoLog" />
+  	  <appender-ref ref="errorLog" />
+  	  <appender-ref ref="traceLog" />
+  	  <appender-ref ref="fatalLog" />
+  	  <appender-ref ref="console" />
+	</logger>
+	<logger name="org.springframework.orm.ibatis.SqlMapClientCallback">
+	  <level value="ERROR" />
+  	  <appender-ref ref="debugLog" />
+  	  <appender-ref ref="infoLog" />
+  	  <appender-ref ref="errorLog" />
+  	  <appender-ref ref="traceLog" />
+  	  <appender-ref ref="fatalLog" />
+  	  <appender-ref ref="console" />
+	</logger>
+    <logger name="java.sql.Connection">
+      <level value="DEBUG" />
+      <appender-ref ref="debugLog" />
+      <appender-ref ref="infoLog" />
+      <appender-ref ref="errorLog" />
+      <appender-ref ref="traceLog" />
+      <appender-ref ref="fatalLog" />
+      <appender-ref ref="console" />
+    </logger>
+    <logger name="java.sql.Statement">
+      <level value="DEBUG" />
+      <appender-ref ref="debugLog" />
+      <appender-ref ref="infoLog" />
+      <appender-ref ref="errorLog" />
+      <appender-ref ref="traceLog" />
+      <appender-ref ref="fatalLog" />
+      <appender-ref ref="console" />
+    </logger>
+    <logger name="java.sql.PreparedStatement">
+      <level value="DEBUG" />
+      <appender-ref ref="debugLog" />
+      <appender-ref ref="infoLog" />
+      <appender-ref ref="errorLog" />
+      <appender-ref ref="traceLog" />
+      <appender-ref ref="fatalLog" />
+      <appender-ref ref="console" />
+    </logger>
+    <logger name="java.sql.ResultSet">
+      <level value="ERROR" />
+      <appender-ref ref="debugLog" />
+      <appender-ref ref="infoLog" />
+      <appender-ref ref="errorLog" />
+      <appender-ref ref="traceLog" />
+      <appender-ref ref="fatalLog" />
+      <appender-ref ref="console" />
+    </logger>
+    
+</log4j:configuration>

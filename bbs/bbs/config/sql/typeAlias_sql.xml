@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<!-- 类映射文件 -->
+<sqlMap>
+	<!-- 板块基类 -->
+	<typeAlias alias="BaseSectionVO" type="cn.edu.ahut.vo.BaseSectionVO" />
+	<!-- 帖子基类 -->
+	<typeAlias alias="BasePostVO" type="cn.edu.ahut.vo.BasePostVO" />
+	<!--用户基本信息  -->
+	<typeAlias alias="UserVO" type="cn.edu.ahut.vo.UserVO" />
+	<!-- 用户详细信息-->
+	<typeAlias alias="UserInfoVO" type="cn.edu.ahut.vo.UserInfoVO" />
+	<!-- 公告-->
+	<typeAlias alias="NoticeVO" type="cn.edu.ahut.vo.NoticeVO"/>
+	<!-- 父板块 -->
+	<typeAlias alias="SectionVO" type="cn.edu.ahut.vo.SectionVO"/>
+	<!-- 子板块 -->
+	<typeAlias alias="SubSectionVO" type="cn.edu.ahut.vo.SubSectionVO"/>
+	<!-- 主题帖 -->
+	<typeAlias alias="TopicVO" type="cn.edu.ahut.vo.TopicVO"/>
+	<!-- 回复帖 -->
+	<typeAlias alias="ReplyVO" type="cn.edu.ahut.vo.ReplyVO"/>
+	<!-- 社区图片 -->
+	<typeAlias alias="ImageVO" type="cn.edu.ahut.vo.ImageVO"/>
+</sqlMap>

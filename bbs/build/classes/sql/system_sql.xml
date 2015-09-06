@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="system">
+	<resultMap id="UserVOResult" class="UserVO">
+		<result column="ID" 			property="id"/>
+		<result column="USERNAME" 		property="username"/>
+		<result column="USERPWD" 		property="userpwd"/>
+		<result column="EMAIL" 			property="email"/>
+	</resultMap>
+	<!-- 根据用户名和密码查找用户 -->
+	<select id="query_userByNamePassword" parameterClass="UserVO" resultMap="UserVOResult" >
+	select
+	tb_user.ID AS ID,
+	tb_user.USERNAME AS USERNAME,
+	tb_user.USERPWD AS USERPWD,
+	tb_user.EMAIL AS EMAIL 
+	from 
+	tb_user 
+	where 
+	tb_user.USERNAME = #username# and
+	tb_user.USERPWD = #userpwd#
+	</select>
+	
+	<!-- 根据用户名查找用户 -->
+	<select id="query_userByName" parameterClass="UserVO" resultMap="UserVOResult">
+	select
+	tb_user.ID AS ID,
+	tb_user.USERNAME AS USERNAME,
+	tb_user.USERPWD AS USERPWD,
+	tb_user.EMAIL AS EMAIL 
+	from 
+	tb_user
+	where 
+	tb_user.USERNAME = #username#
+	</select>
+	
+	<!-- 根据ID查找用户 -->
+	<select id="query_userById" parameterClass="UserVO" resultMap="UserVOResult">
+	select
+	tb_user.ID AS ID,
+	tb_user.USERNAME AS USERNAME,
+	tb_user.USERPWD AS USERPWD,
+	tb_user.EMAIL AS EMAIL 
+	from 
+	tb_user
+	where 
+	tb_user.id = #id#
+	</select>
+	
+	<!-- 用户注册 -->
+	<insert id="insert_userVO" parameterClass="UserVO" >
+	insert into 
+	tb_user(
+		USERNAME,
+		USERPWD,
+		EMAIL
+	)values(
+		#username#,
+		#userpwd#,
+		#email#
+	)
+	</insert>
+	
+	<!-- 用户详细信息 -->
+	<resultMap class="UserInfoVO" id="UserInfoVOResult">
+		<result column="uid" 			property="uid"/>
+		<result column="sex" 			property="sex"/>
+		<result column="birthday" 		property="birthday"/>
+		<result column="telephone" 		property="telephone"/>
+		<result column="mobile" 		property="mobile"/>
+		<result column="qq" 			property="qq"/>
+		<result column="image" 			property="image"/>
+		<result column="realname" 		property="realname"/>
+		<result column="address" 		property="address"/>
+		<result column="website" 		property="webSite"/>
+		<result column="usersign" 		property="userSign"/>
+		<result column="introduction" 	property="introduction"/>
+		<result column="postsign" 		property="postSign"/>
+		<result column="sysrole" 		property="sysrole"/>
+		<result column="syslevel" 		property="sysLevel"/>
+		<result column="usertitle" 		property="userTitle"/>
+		<result column="scores" 		property="scores"/>
+		<result column="regtime" 		property="regTimeStr"/>
+		<result column="logintime" 		property="loginTimeStr"/>
+		<result column="loginip" 		property="loginIp"/>
+		<result column="status" 		property="status"/>
+		<result column="onlinetime" 	property="onlineTime"/>
+		<result column="question"		property="question"/>
+		<result column="answer" 		property="answer"/>
+	</resultMap>
+	<!-- 根据用户基本信息的ID查询用户详细信息 -->
+	<select id="query_userInfoVO" parameterClass="UserVO" resultMap="UserInfoVOResult">
+		SELECT
+		t.uid as uid,
+		a.displayname as sex,
+		DATE_FORMAT(t.birthday,'%Y-%m-%d') as birthday,
+		t.telephone as telephone,
+		t.mobile as mobile,
+		t.qq as qq,
+		t.image as image,
+		t.realname as realname,
+		t.address as address,
+		t.website as website,
+		t.usersign as usersign,
+		t.introduction as introduction,
+		t.postsign as postsign,
+		t.onlinetime as onlinetime,
+		b.displayname as syslevel,
+		c.displayname as usertitle,
+		t.scores as scores,
+		t.loginip as loginip,
+		d.displayname as status,
+		e.displayname as sysrole,
+		DATE_FORMAT(t.regtime,'%Y-%m-%d') as regtime,
+		DATE_FORMAT(t.logintime,'%Y-%m-%d') as logintime,
+		t.question as question,
+		t.answer as answer
+		FROM 
+		tb_userinfo t
+		left join tb_code a on(a.name='sex' and a.value=t.sex)
+		left join tb_code b on(b.name='syslevel' and b.value=t.syslevel)
+		left join tb_code c on(c.name='usertitle' and c.value=t.usertitle)
+		left join tb_code d on(d.name='status' and d.value=t.status)
+		left join tb_code e on(e.name='sysrole' and e.value=t.sysrole)
+		where t.uid = #id#
+	</select>
+	
+	<!-- 更新用户在线时间  -->
+	<update id="update_onlinetime" parameterClass="UserInfoVO">
+		update tb_userinfo t
+		set t.onlinetime = #onlineTime#
+		where t.uid = #uid#
+	</update>
+	
+	<!-- 更新用户登录时间 和IP -->
+	<update id="update_logintime_ip" parameterClass="UserInfoVO">
+		update tb_userinfo t
+		set 
+		t.logintime = #loginTime#,
+		t.loginip = #loginIp#
+		where t.uid = #uid#
+	</update>
+	
+	<!-- 注册成功时初始化用户详细信息表 -->
+	<insert id="insert_userInfoVO" parameterClass="UserInfoVO">
+		INSERT INTO tb_userinfo
+		(
+			UID,
+			REGTIME,
+			LOGINTIME,
+			LOGINIP,
+			STATUS,
+			SCORES,
+			SYSLEVEL,
+			USERTITLE,
+			SYSROLE,
+			IMAGE
+		)VALUES(
+			#uid#,
+			#regTime#,
+			#loginTime#,
+			#loginIp#,
+			#status#,
+			#scores#,
+			#sysLevel#,
+			#userTitle#,
+			#sysrole#,
+			#image#
+		)
+	</insert>
+	
+	<!-- 更新用户的基本资料 -->
+	<update id="update_userInfo_basicInfo" parameterClass="UserInfoVO">
+		update tb_userinfo t
+		set
+		t.sex = #sex#,
+		t.birthday = #birthday#,
+		t.address = #address#,
+		t.website = #webSite#,
+		t.usersign = #userSign#,
+		t.introduction = #introduction#,
+		t.postsign = #postSign#
+		where
+		t.uid = #uid#
+	</update>
+	
+	<!-- 更新用户的联系方式 -->
+	<update id="update_userInfo_connectInfo" parameterClass="UserInfoVO">
+		update tb_userinfo t
+		set
+		t.telephone = #telephone#,
+		t.mobile = #mobile#,
+		t.qq = #qq#
+		where
+		t.uid = #uid#
+	</update>
+	
+	<!-- 更新用户的头像 -->
+	<update id="update_userInfo_image" parameterClass="UserInfoVO">
+		update tb_userinfo t
+		set
+		t.image = #image#
+		where t.uid = #uid#
+	</update>
+	
+	<!-- 更新用户的密码 -->
+	<update id="update_userVO_password" parameterClass="userVO">
+		update tb_user t
+		set
+		t.userpwd = #userpwd#
+		where
+		t.id = #id#
+	</update>
+	
+	<!-- *******************************系统初始化开始*************************** -->
+	
+	<!-- *******************************系统初始化结束*************************** -->
+	
+</sqlMap>

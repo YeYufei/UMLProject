@@ -1,0 +1,44 @@
+@CHARSET "UTF-8";
+
+.register_div{
+	width: 94%;
+	height: 75%;
+	border: #B0E0E6 1px solid;
+}
+
+.register_table{
+	width: 100%;
+	margin: 20px;
+	font-size: 13px;
+}
+
+.register_table tr{
+	width: 100%;
+}
+
+.register_table td{
+	vertical-align: middle;
+}
+
+.input_div{
+	border:1px solid #D3D3D3;
+	width: 100%; 
+	height: 20px;
+	text-align: left;
+}
+
+.validate_div{
+	width: 80%; 
+	height: 20px
+}
+
+.validate_div_border{
+	border:#7FFFD4 1px dashed;
+	background-color: #87CEFA;
+}
+
+.strong_div{
+	width: 53;
+	height: 1;
+	float: left;
+}

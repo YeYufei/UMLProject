@@ -1,0 +1,100 @@
+@CHARSET "UTF-8";
+body{
+	border: 1px solid #87CEEB;
+}
+
+#list td{
+	font-size: 13px;
+	border-top: 1px dashed #B0C4DE;
+	vertical-align: middle;
+	padding-top: 5px;
+	padding-bottom: 2px;
+}
+.bg_tr{
+	background-color: #F0F8FF;
+}
+
+th{
+	font-size: 15px;
+	color: #4169E1;
+	background-color: white;
+	font-weight: bolder;
+}
+
+a:visited{
+	color: blue;
+}
+
+.a0{
+	color: #228B22;
+	font-size: 13px;
+}
+.a0:hover{
+	color:blue;
+	font-size: 13px;
+}
+
+.a0:visited{
+	color: #228B22;
+	font-size: 13px;
+}
+
+.a1{
+	color: #FF8C00;
+	font-size: 13px;
+}
+.a1:hover{
+	color:blue;
+	font-size: 13px;
+}
+
+.a1:visited{
+	color: #FF8C00;
+	font-size: 13px;
+}
+
+.a2{
+	color: red;
+	font-size: 13px;
+}
+.a2:hover{
+	color: blue;
+	font-size: 13px;
+}
+.a2:visited{
+	color: red;
+	font-size: 13px;
+}
+
+.a3{
+	color: gray;
+	font-size: 13px;
+}
+.a3:hover{
+	color: blue;
+	font-size: 13px;
+}
+.a3:visited{
+	color: gray;
+	font-size: 13px;
+}
+
+.subSection{
+	font-size: 13px;
+	color: blue;
+	cursor: pointer;
+}
+
+.subSection_hover{
+	font-size: 13px;
+	color: blue;
+	cursor: pointer;
+	text-decoration: underline;
+}
+
+.subSection_selected{
+	font-size: 13px;
+	color:white;
+	background-color: #D2691E;
+	cursor: pointer;
+}

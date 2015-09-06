@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+	"http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<constant name="struts.i18n.encoding" value="UTF-8"/>
+	<constant name="struts.custom.i18n.resources" value="messageResource"/>
+
+	<package name="struts_bbs" namespace="/" extends="struts-default">
+		<interceptors>
+			<interceptor name="appException" class="cn.edu.ahut.util.interceptor.AppExceptionInterceptor" />
+			<interceptor-stack name="user" >
+				<interceptor-ref name="appException" />
+				<interceptor-ref name="defaultStack"/>
+			</interceptor-stack>
+		</interceptors>
+
+		<default-interceptor-ref name="user"/>
+	
+	<global-results>
+		<result name="error" type="redirect">/pages/Error.jsp</result>
+		<result name="login" type="redirect">/login.jsp</result>
+	</global-results>
+	</package>
+	<include file="./struts/system_struts.xml" />
+	<include file="./struts/admin_struts.xml" />
+	<include file="./struts/common_struts.xml" />
+</struts>
